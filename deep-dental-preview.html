@@ -1,0 +1,513 @@
+<!doctype html><html dir="auto"><head><meta http-equiv="Content-Security-Policy" content="default-src 'unsafe-inline' 'unsafe-eval' https: data: blob:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<script id="__base44_dark_class__">document.documentElement.classList.remove('dark');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Text:wght@400;500;600;700&display=swap">
+<style id="__base44_editor_theme__">
+:root {
+  --background: 38 27% 94%;
+  --foreground: 0 0% 4%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 4%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 4%;
+  --primary: 21 42% 55%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 0% 96%;
+  --secondary-foreground: 0 0% 9%;
+  --muted: 39 17% 93%;
+  --muted-foreground: 0 0% 45%;
+  --accent: 0 0% 96%;
+  --accent-foreground: 0 0% 9%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 0 0% 98%;
+  --input: 0 0% 98%;
+  --ring: 21 42% 55%;
+  --radius: 0.5rem;
+  color-scheme: light;
+}
+.dark {
+  --background: 220 5% 11%;
+  --foreground: 0 0% 99%;
+  --card: 0 1% 14%;
+  --card-foreground: 0 0% 99%;
+  --popover: 0 1% 14%;
+  --popover-foreground: 0 0% 99%;
+  --primary: 21 42% 55%;
+  --primary-foreground: 0 0% 99%;
+  --secondary: 0 0% 18%;
+  --secondary-foreground: 0 0% 99%;
+  --muted: 0 0% 18%;
+  --muted-foreground: 0 0% 65%;
+  --accent: 0 0% 18%;
+  --accent-foreground: 0 0% 99%;
+  --destructive: 0 62% 30%;
+  --destructive-foreground: 0 0% 99%;
+  --border: 0 0% 16%;
+  --input: 0 0% 16%;
+  --ring: 21 42% 55%;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+/* shadcn's base layer: default every element's border-color to the theme
+   token. Without this, Tailwind's bare `border` utility only sets width and
+   the color falls back to currentColor (near-black text) — so the model's
+   `border` cards render heavy/dark and the `--border` value is ignored.
+   Explicit `border-{color}` utilities and inline styles still override. */
+*, *::before, *::after { border-color: hsl(var(--border)); }
+html, body {
+  margin: 0 !important;
+  padding: 0;
+  overflow: auto !important;
+  /* Inline card: transparent, so the real chat surface (a gradient, not the
+     single flat `--background` stop) shows straight through and the artifact
+     reads as inline chat content in both themes. Standalone saved file: opaque
+     `--background` so it stays readable on its own page. `--card` stays
+     elevated for emphasis blocks (stat tiles, panels) so hierarchy reads. */
+  background: hsl(var(--background)) !important;
+  color: hsl(var(--foreground));
+  font-family: 'WixMadeforText', 'Wix Madefor Text', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+/* 8px (vs 16px) — minimal breathing room from the iframe edge so tightly-composed
+   dashboards don't ship a fat empty halo before their first element. */
+body { padding: 8px; }
+
+code, kbd, pre, samp { font-family: 'WixMadeforMonospace', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+a { color: hsl(var(--primary)); }
+hr { border: 0; border-top: 1px solid hsl(var(--border)); }
+h1, h2, h3, h4, h5, h6 { font-weight: 600; color: hsl(var(--foreground)); }
+</style>
+<script id="__base44_tw_config__">
+window.tailwind = window.tailwind || {};
+window.tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
+        primary: { DEFAULT: 'hsl(var(--primary))', foreground: 'hsl(var(--primary-foreground))' },
+        secondary: { DEFAULT: 'hsl(var(--secondary))', foreground: 'hsl(var(--secondary-foreground))' },
+        destructive: { DEFAULT: 'hsl(var(--destructive))', foreground: 'hsl(var(--destructive-foreground))' },
+        muted: { DEFAULT: 'hsl(var(--muted))', foreground: 'hsl(var(--muted-foreground))' },
+        accent: { DEFAULT: 'hsl(var(--accent))', foreground: 'hsl(var(--accent-foreground))' },
+        popover: { DEFAULT: 'hsl(var(--popover))', foreground: 'hsl(var(--popover-foreground))' },
+        card: { DEFAULT: 'hsl(var(--card))', foreground: 'hsl(var(--card-foreground))' },
+      },
+      // A bare `border` / `divide-*` (no color) falls back to Tailwind
+      // preflight's DEFAULT, which is a FIXED gray-200 (#e5e7eb) — subtle on the
+      // light card but near-white glare on the dark card. The `colors.border`
+      // map above only creates the `border-border` class; it does NOT set the
+      // uncolored default. Point the DEFAULT at the theme token so an uncolored
+      // border adapts to dark mode like the rest of the palette. (Explicit
+      // `border-primary` etc. still override.)
+      borderColor: { DEFAULT: 'hsl(var(--border))' },
+      divideColor: { DEFAULT: 'hsl(var(--border))' },
+      borderRadius: {
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
+      },
+      fontFamily: {
+        // Same two-name stack as `FONT_SANS_STACK` above. The
+        // sandboxed null-origin iframe lands on `Wix Madefor Text`
+        // (Google Fonts' name); `WixMadeforText` is here only for
+        // defense-in-depth in case the iframe ever runs same-origin.
+        sans: ['WixMadeforText', 'Wix Madefor Text', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+        mono: ['WixMadeforMonospace', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
+      },
+    },
+  },
+};
+</script>
+<script src="https://cdn.tailwindcss.com" id="__base44_tw_cdn__"></script></head><body><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+:root {
+  --brand-primary: #6a2c2c;
+  --brand-primary-dark: #4a1c1c;
+  --brand-gold: #c89632;
+  --brand-gold-light: #e0b355;
+  --brand-dark: #1a1a1a;
+  --brand-gray: #f7f5f3;
+  --brand-gray-dark: #e8e4e0;
+  --brand-text: #2d2d2d;
+  --brand-muted: #888888;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--brand-text);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+img { max-width: 100%; display: block; }
+
+.banner {
+  background: linear-gradient(90deg, #000, #1a1a1a);
+  color: #fff;
+  text-align: center;
+  padding: 12px 20px;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+.banner strong { font-weight: 700; }
+
+.hero {
+  position: relative;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(26,10,10,0.92) 0%, rgba(106,44,44,0.75) 50%, rgba(74,28,28,0.6) 100%);
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 60px 50px;
+  max-width: 800px;
+  color: #fff;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(200,150,50,0.15);
+  border: 1px solid rgba(200,150,50,0.35);
+  color: var(--brand-gold-light);
+  padding: 10px 22px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+}
+.hero-badge-dot { width: 8px; height: 8px; background: var(--brand-gold); border-radius: 50%; }
+.hero h1 {
+  font-size: 3.2rem;
+  font-weight: 800;
+  line-height: 1.05;
+  margin-bottom: 25px;
+  letter-spacing: -1px;
+}
+.hero h1 .accent { color: var(--brand-gold); font-style: italic; font-weight: 400; }
+.hero p {
+  font-size: 1.2rem;
+  opacity: 0.85;
+  max-width: 550px;
+  margin-bottom: 35px;
+}
+.hero-btns { display: flex; gap: 15px; flex-wrap: wrap; }
+.btn-primary {
+  background: var(--brand-gold);
+  color: #fff;
+  padding: 16px 40px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 16px;
+}
+.btn-outline {
+  background: rgba(255,255,255,0.08);
+  border: 2px solid rgba(255,255,255,0.25);
+  color: #fff;
+  padding: 14px 38px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.trust-bar {
+  background: var(--brand-dark);
+  padding: 35px 50px;
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  flex-wrap: wrap;
+}
+.trust-item { text-align: center; color: rgba(255,255,255,0.9); }
+.trust-num { font-size: 2.2rem; font-weight: 800; color: var(--brand-gold); margin-bottom: 6px; }
+.trust-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.6; }
+
+.section-header { text-align: center; margin-bottom: 50px; }
+.section-tag {
+  color: var(--brand-gold);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.section-header h2 { font-size: 2.2rem; font-weight: 800; color: var(--brand-dark); margin-bottom: 15px; }
+.section-header p { font-size: 1.1rem; color: var(--brand-muted); max-width: 600px; margin: 0 auto; }
+
+.services { background: var(--brand-gray); padding: 80px 40px; }
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.service-card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--brand-gray-dark);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.service-card:hover { transform: translateY(-5px); box-shadow: 0 20px 50px rgba(0,0,0,0.1); }
+.service-card-img { height: 200px; background-size: cover; background-position: center; }
+.service-card-body { padding: 28px; }
+.service-card-body h3 { font-size: 1.25rem; font-weight: 700; color: var(--brand-dark); margin-bottom: 10px; }
+.service-card-body p { font-size: 14px; color: var(--brand-muted); line-height: 1.7; margin-bottom: 12px; }
+.service-card-body .price { font-size: 13px; color: var(--brand-gold); font-weight: 600; }
+
+.about { padding: 80px 40px; }
+.about-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
+  align-items: center;
+}
+.about-img {
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+}
+.about-img img { width: 100%; height: 400px; object-fit: cover; }
+.about-img-badge {
+  position: absolute;
+  bottom: -20px;
+  right: -15px;
+  background: var(--brand-primary);
+  color: #fff;
+  padding: 25px;
+  border-radius: 14px;
+}
+.about-img-badge .num { font-size: 2.5rem; font-weight: 800; color: var(--brand-gold); line-height: 1; }
+.about-img-badge .text { font-size: 12px; opacity: 0.85; margin-top: 5px; max-width: 120px; }
+.about-content h2 { font-size: 2rem; font-weight: 800; color: var(--brand-dark); margin-bottom: 20px; }
+.about-content p { font-size: 1.05rem; color: var(--brand-text); margin-bottom: 18px; line-height: 1.8; }
+.about-features { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 25px 0; }
+.about-feature { display: flex; align-items: center; gap: 10px; }
+.about-feature .check {
+  width: 24px; height: 24px;
+  background: var(--brand-gold);
+  color: #fff;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700;
+  flex-shrink: 0;
+}
+.about-feature span { font-size: 14px; color: var(--brand-text); font-weight: 500; }
+
+.doctor { background: var(--brand-gray); padding: 80px 40px; }
+.doctor-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 50px;
+}
+.doctor-card {
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-primary-dark));
+  border-radius: 18px;
+  padding: 40px 30px;
+  color: #fff;
+  text-align: center;
+}
+.doctor-card .avatar {
+  width: 150px; height: 150px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 64px; font-weight: 800; color: var(--brand-gold);
+}
+.doctor-card h3 { font-size: 1.4rem; margin-bottom: 5px; }
+.doctor-card .title { color: var(--brand-gold); font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 18px; }
+.doctor-card .creds { font-size: 13px; opacity: 0.7; line-height: 1.8; }
+.doctor-info h2 { font-size: 1.8rem; font-weight: 800; color: var(--brand-dark); margin-bottom: 18px; }
+.doctor-info p { font-size: 1rem; color: var(--brand-text); margin-bottom: 16px; line-height: 1.8; }
+
+.cta-banner {
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-primary-dark));
+  padding: 60px 40px;
+  text-align: center;
+  color: #fff;
+}
+.cta-banner h2 { font-size: 2rem; font-weight: 800; margin-bottom: 18px; }
+.cta-banner p { font-size: 1.1rem; opacity: 0.8; margin-bottom: 30px; }
+
+@media (max-width: 768px) {
+  .services-grid { grid-template-columns: 1fr; }
+  .about-container, .doctor-container { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 2.2rem; }
+  .trust-bar { gap: 25px; }
+}
+</style>
+</head>
+<body>
+
+<div class="banner">Preview generated by <strong>ASCEND WORKS</strong> — Redesigned concept for Deep Dental Clinic</div>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg" style="background-image: url('https://media.base44.com/images/public/6a722a817fbae913837c11e1/17c7c0bd6_generated_image.png');"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><span class="hero-badge-dot"></span>NABH Accredited · 240+ Reviews · 4.9 ★</div>
+    <h1>Exceptional dental care, <span class="accent">rooted in comfort</span></h1>
+    <p>Mohali's first NABH-accredited standalone dental clinic. From routine cleanings to full-mouth rehabilitation, we combine advanced technology with genuinely compassionate care.</p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-primary">Book Your Appointment →</a>
+      <a href="#services" class="btn-outline">Explore Our Services</a>
+    </div>
+  </div>
+</section>
+
+<!-- Trust Bar -->
+<div class="trust-bar">
+  <div class="trust-item"><div class="trust-num">240+</div><div class="trust-label">5-Star Reviews</div></div>
+  <div class="trust-item"><div class="trust-num">4.9★</div><div class="trust-label">Google Rating</div></div>
+  <div class="trust-item"><div class="trust-num">20+</div><div class="trust-label">Dental Services</div></div>
+  <div class="trust-item"><div class="trust-num">15+</div><div class="trust-label">Years Experience</div></div>
+  <div class="trust-item"><div class="trust-num">NABH</div><div class="trust-label">Accredited</div></div>
+</div>
+
+<!-- Services -->
+<section class="services" id="services">
+  <div class="section-header">
+    <div class="section-tag">What We Offer</div>
+    <h2>Complete Dental Care Under One Roof</h2>
+    <p>From preventive checkups to complex surgical procedures, our 20+ specialized services cover every aspect of your oral health.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-card-img" style="background-image: url('https://media.base44.com/images/public/6a722a817fbae913837c11e1/fe85f9161_generated_image.png');"></div>
+      <div class="service-card-body">
+        <h3>Dental Implants</h3>
+        <p>Permanent tooth replacement using Osstem, Straumann, Nobel Biocare & Biohorizons implant systems. Full surgical placement with guided digital planning.</p>
+        <div class="price">Consultation: ₹500</div>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-card-img" style="background-image: url('https://media.base44.com/images/public/6a722a817fbae913837c11e1/96be92d09_generated_image.png');"></div>
+      <div class="service-card-body">
+        <h3>Root Canal Treatment</h3>
+        <p>Painless endodontic therapy using surgical microscope and rotary instruments. Saves infected teeth — typically completed in 1-2 visits.</p>
+        <div class="price">From ₹3,000 per tooth</div>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-card-img" style="background-image: url('https://media.base44.com/images/public/6a722a817fbae913837c11e1/5188430a7_generated_image.png');"></div>
+      <div class="service-card-body">
+        <h3>Cosmetic Dentistry</h3>
+        <p>Veneers, professional whitening, and smile makeovers tailored to your facial aesthetics. Digital smile design lets you preview results.</p>
+        <div class="price">Veneers from ₹8,000/tooth</div>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-card-body">
+        <h3>Invisalign & Clear Aligners</h3>
+        <p>Virtually invisible, custom-made aligners that straighten teeth without metal braces. Removable for eating and cleaning. 3D-scanned for a precise fit.</p>
+        <div class="price">From ₹40,000</div>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-card-body">
+        <h3>Laser Dentistry</h3>
+        <p>Soft-tissue laser treatment for precise, minimally invasive procedures. Faster healing, less bleeding, and reduced post-op discomfort.</p>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-card-body">
+        <h3>Pediatric Dentistry</h3>
+        <p>Gentle, child-friendly dental care in a welcoming environment. From first checkups to sealants and habit-breaking appliances.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About -->
+<section class="about" id="about">
+  <div class="about-container">
+    <div class="about-img">
+      <img src="https://media.base44.com/images/public/6a722a817fbae913837c11e1/96be92d09_generated_image.png" alt="Deep Dental Clinic treatment">
+      <div class="about-img-badge">
+        <div class="num">NABH</div>
+        <div class="text">Mohali's 1st accredited standalone dental clinic</div>
+      </div>
+    </div>
+    <div class="about-content">
+      <div class="section-tag">Our Story</div>
+      <h2>Setting the standard for dental excellence in Mohali</h2>
+      <p>Deep Dental Clinic was founded with a simple belief: dental care should be thorough, transparent, and genuinely comfortable. As Mohali's first NABH-accredited standalone dental clinic, we hold ourselves to the highest standards of patient safety and clinical quality.</p>
+      <p>Our team brings together specialists across every discipline — endodontics, oral surgery, orthodontics, pediatric dentistry, and implantology — so you get expert treatment without visiting multiple clinics.</p>
+      <div class="about-features">
+        <div class="about-feature"><div class="check">✓</div><span>NABH accredited facility</span></div>
+        <div class="about-feature"><div class="check">✓</div><span>OPG-2D imaging on-site</span></div>
+        <div class="about-feature"><div class="check">✓</div><span>Intraoral 3D scanning</span></div>
+        <div class="about-feature"><div class="check">✓</div><span>Surgical microscope</span></div>
+        <div class="about-feature"><div class="check">✓</div><span>Conscious sedation</span></div>
+        <div class="about-feature"><div class="check">✓</div><span>Green dentistry practices</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Doctor -->
+<section class="doctor" id="doctor">
+  <div class="section-header">
+    <div class="section-tag">Leadership</div>
+    <h2>Meet the doctor behind Deep Dental</h2>
+  </div>
+  <div class="doctor-container">
+    <div class="doctor-card">
+      <div class="avatar">G</div>
+      <h3>Dr. Gursharandeep Singh</h3>
+      <div class="title">Managing Director · Chief Dentist</div>
+      <div class="creds">BDS, MDS<br>Implantology Specialist<br>NABH Lead Clinician<br>15+ Years Practice</div>
+    </div>
+    <div class="doctor-info">
+      <h2>Dr. Gursharandeep Singh</h2>
+      <p>Dr. Singh founded Deep Dental Clinic with a vision to bring world-class dental care to Mohali. Under his leadership, the clinic became the region's first NABH-accredited standalone dental facility — requiring rigorous adherence to patient safety, infection control, and clinical excellence standards.</p>
+      <p>His approach is straightforward: explain everything clearly, recommend only what's needed, and make sure every patient leaves with a healthier smile. Patients consistently praise his honesty — with several reviews noting he recommended less expensive treatments when a simpler solution would work.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-banner">
+  <h2>Ready for a healthier smile?</h2>
+  <p>Book your appointment today. Walk-ins welcome, but appointments are recommended.</p>
+  <a href="#contact" class="btn-primary">Book Your Appointment →</a>
+</section>
+
+</body>
+</html><script id="__base44_dark_class_post__">document.documentElement.classList.remove('dark');</script></body></html>
